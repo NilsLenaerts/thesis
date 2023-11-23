@@ -20,6 +20,11 @@ def vboxTimeOffset(machineName, time):
 def vboxShutDownMachine(machineName):
     command = ["VBoxManage", "controlvm" , machineName, "shutdown"]
     output = subprocess.run(command,capture_output=True)
+    while(machineName in vboxGetRunningVMs()):
+        #print(vboxCommands.vboxGetRunningVMs())    
+        print("waiting for full shutdown",end="\r")
+        time.sleep(0.500)
+    print()
     if debug:
             printOutput(output)
     return output.returncode
@@ -33,18 +38,19 @@ def vboxStartMachine(machineName):
     if debug:
         printOutput(output)
     if output.returncode == 0:
+        #wait for guest execution service
         print("waiting for complete startup")
         time.sleep(10)
     
     return output.returncode
 
-def vboxGetFile(machineName, guestPath, hostPath,userName, password):
-    command = ["VBoxManage", "guestcontrol" , machineName, "copyfrom", guestPath,hostPath, f"--username={userName}", f"--password={password}"]
+def vboxGetFile(machineName, guestPath, hostPath,username, password):
+    command = ["VBoxManage", "guestcontrol" , machineName, "copyfrom", guestPath,hostPath, f"--username={username}", f"--password={password}"]
     output = subprocess.run(command,capture_output=True)
     if "guest execution service is not ready" in output.stderr.decode("utf-8"):
         print("Machine not fully on retrying in 5 sec")
         time.sleep(5)
-        output = vboxGetFile(machineName,guestPath,hostPath, userName, password)
+        output = vboxGetFile(machineName,guestPath,hostPath, username, password)
         return output
     if debug:
         printOutput(output)
@@ -55,11 +61,18 @@ def vboxGetRunningVMs():
     if debug:
         printOutput(output)
     return output.stdout.decode("utf-8")
+def vboxRunCommand(machineName, commandPath, args, username, password, timeout=0):
+    command = ["VBoxManage", "guestcontrol" , machineName, "run", f"--exe={commandPath}", f"--username={username}", f"--password={password}", f"--timeout={timeout}", "--", args]
+    output = subprocess.run(command,capture_output=True)
+    print("running")
+
 
 if __name__=="__main__":
     debug=0
     #vboxTimeOffset("Windows 10")
     vboxStartMachine("Windows10")
     vboxGetRunningVMs()
-    vboxGetFile("Windows10","/Users/User/AppData/Local/Google/Chrome/User Data/Default/History", "./","user","user123")
+    #vboxGetFile("Windows10","/Users/User/AppData/Local/Google/Chrome/User Data/Default/History", "./","user","user123")
+    
+    
     vboxShutDownMachine("Windows10")
