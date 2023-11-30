@@ -1,7 +1,7 @@
 from selenium import webdriver
 import time
 
-
+future = 1
 options = webdriver.ChromeOptions()
 options.add_argument("user-data-dir=/Users/user/AppData/Local/Google/Chrome/User Data/")
 driver = webdriver.Remote(
@@ -9,11 +9,20 @@ driver = webdriver.Remote(
    options=options
 )
 try:
-    driver.get_log('driver')
-    driver.get("https://facebook.com")
+    print(driver.get_log('driver'))
     driver.get("http://example.com")
-    driver.get("https://uhasselt.be")
-    time.sleep(1)
+    if future==0:
+        driver.get("https://facebook.com")
+        driver.get("https://google.com")
+        driver.get("https://reddit.com")
+
+    print(driver.get_log('driver'))
+    print(driver.get_log('browser'))
+
+    if future==1:
+        time.sleep(30)
+    else:
+        time.sleep(5)
 finally:
     driver.close()
     driver.quit()

@@ -10,6 +10,8 @@ def printOutput(output):
     # use decode function to convert to string
     print('Output:',output.stdout.decode("utf-8"))
     print('Err:',output.stderr.decode("utf-8"))
+
+
 def vboxTimeOffset(machineName, time):
     command = ["VBoxManage", "modifyvm", machineName, "--biossystemtimeoffset", str(time)]
     output = subprocess.run(command,capture_output=True)
@@ -62,17 +64,20 @@ def vboxGetRunningVMs():
         printOutput(output)
     return output.stdout.decode("utf-8")
 def vboxRunCommand(machineName, commandPath, args, username, password, timeout=0):
-    command = ["VBoxManage", "guestcontrol" , machineName, "run", f"--exe={commandPath}", f"--username={username}", f"--password={password}", f"--timeout={timeout}", "--", args]
+    command = ["VBoxManage", "guestcontrol" , machineName, "run", f"--exe={commandPath}", f"--username={username}", f"--password={password}", f"--timeout={timeout}", "--"] + args
     output = subprocess.run(command,capture_output=True)
-    print("running")
-
+    print(output)
+    return output
+    
 
 if __name__=="__main__":
-    debug=0
+    debug=1
+    vboxShutDownMachine("Windows10")
+    vboxTimeOffset("Windows10",0)
     #vboxTimeOffset("Windows 10")
     vboxStartMachine("Windows10")
     vboxGetRunningVMs()
     #vboxGetFile("Windows10","/Users/User/AppData/Local/Google/Chrome/User Data/Default/History", "./","user","user123")
     
     
-    vboxShutDownMachine("Windows10")
+    #vboxShutDownMachine("Windows10")

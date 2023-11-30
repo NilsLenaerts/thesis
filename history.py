@@ -1,6 +1,8 @@
 import paramiko
 import sqlite3
 import shutil
+import time
+from datetime import datetime, timedelta, timezone
 # SSH connection parameters
 ssh_host = "192.168.0.141"
 ssh_host = "192.168.56.101"
@@ -39,18 +41,19 @@ def parseHistory(historyfile):
     cursor = conn.cursor()
 
     # Query the history data
-    cursor.execute("SELECT url, title, visit_count FROM urls")
+    cursor.execute("SELECT url, title, visit_count, last_visit_time FROM urls")
     history_data = cursor.fetchall()
-
     # Close the database connection
     conn.close()
 
     # Process and print the history data
     count = 0
+    epoch = datetime(1601, 1, 1, tzinfo=timezone.utc)
     for row in history_data:
         count += 1
-        url, title, visit_count = row
-        print(f"URL: {url}")
+        url, title, visit_count, last_visit_time = row
+        visit_time = epoch + timedelta(microseconds=last_visit_time)
+        print(f"URL: {url}, TIME: {visit_time}")
         #print(f"Title: {title}")
         #print(f"Visit Count: {visit_count}")
         #print("\n")
@@ -63,9 +66,15 @@ def openChrome(url):
     ssh.connect(ssh_host, ssh_port, ssh_username, ssh_password)
 
     ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(f'"/Users/user/Desktop/chrome - Shortcut.lnk" {url}')
-    print(ssh_stdout)
+    #print(ssh_stdout)
+    
     ssh.close()
-
+def closeChrome():
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    ssh.connect(ssh_host, ssh_port, ssh_username, ssh_password)
+    print(ssh.exec_command(f"taskkill /f /im chrome.exe /t"))
+    ssh.close()
 if __name__=="__main__":
-    openChrome()
+    #openChrome("google.com")
     getHistoryCount()
