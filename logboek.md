@@ -16,4 +16,8 @@ Selenium geinstalleerd, kan websites openen en krijg ze te zien in de history. n
 kan websites openen in de toekomst, als je chrome 30sec laat openstaan en dan de history bekijkt zie je dat die verwijderd word.
 
 
-selenium word opgestart on boot in windows 10 en met de juiste gebruiker door taskscheduler te gebruiken
+selenium word opgestart on boot in windows 10 en met de juiste gebruiker door taskscheduler te gebruiken, moet dan ook de heartbeat period en healthcheck-interval hoog genoeg zetten zodat het niet uitvalt
+
+using this post: https://learn.microsoft.com/en-us/answers/questions/226778/allow-all-the-standard-windows-10-users-to-change allow all users to change system time
+
+programma werk, maar de history duurt steeds langer om verwijderd te worden als er meer entries zijn, timeout scalen?

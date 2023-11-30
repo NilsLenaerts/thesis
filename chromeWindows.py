@@ -1,5 +1,5 @@
 import vboxCommands
-import selenium
+from selenium import webdriver
 import history
 import datetime
 import time
@@ -11,9 +11,9 @@ VMIP="192.168.56.101"
 debugPrints=1
 
 def getSeleniumDriver():
-    options = selenium.webdriver.ChromeOptions()
+    options = webdriver.ChromeOptions()
     options.add_argument("user-data-dir=/Users/user/AppData/Local/Google/Chrome/User Data/")
-    driver = selenium.webdriver.Remote(
+    driver = webdriver.Remote(
     command_executor=f'http://{VMIP}:4444/wd/hub',
     options=options
     )
@@ -28,14 +28,25 @@ def visitSites():
     driver.get("https://reddit.com")
     driver.get("https://example.com")
     time.sleep(5)
+    driver.close()
+    driver.quit()
 def setDate(newDate):
-    vboxCommands.vboxRunCommand(VMName,"C:\\Windows\\System32\\cmd.exe", ["runas", "/user:Administrator" , "date", "26/11/2024"], VMUsername,VMPassword,0)
-
+    formatted_date = newDate.strftime("%d-%m-%y")
+    output = vboxCommands.vboxRunCommand(VMName,"C:\\Windows\\System32\\cmd.exe", ["/c" , "date", formatted_date], VMUsername,VMPassword,15000)
+    if output.returncode != 0:
+        print("setting time timed out")
+        exit(-1)
 def checkHistory(currentCount):
     driver = getSeleniumDriver()
     driver.get("http://example.com")
+    print("waiting for update in history")
     time.sleep(20)
+    driver.close()
+    driver.quit()
+    time.sleep(2)
+    print("done waiting")
     if getHistory() < currentCount:
+        print("smaller")
         return 1
     return 0
 
@@ -44,23 +55,24 @@ def main():
     print("Testing data rollover for chrome on windows10")
     print("starting VM")
     vboxCommands.vboxStartMachine(VMName)
+    currentDate = datetime.datetime.now().date()
+    setDate(newDate)
     print("Getting current history amount")
     print(f"There are currently {getHistory()} history entries")
     print("Visiting websites")
     visitSites()
     currentCount=getHistory()
     print(f"There are currently {currentCount} history entries")
-    currentDate = datetime.datetime.now().date()
     print(f"Current date: {currentDate}")
-    for i in range(100,__step=5):
+    for i in range(1,200,5):
         newDate= currentDate + datetime.timedelta(days=i)
         setDate(newDate)
-        print(f"Current set date is {newDate}",end="\r")
-        if checkHistory:
+        print(f"Current set date is {newDate}, {i} days from now")
+        if checkHistory(currentCount)==1:
             print(f"After {i} days the history count changed from {currentCount} to {getHistory()}")
             break
     print("Done")       
-
+    setDate(currentDate)
 
 if __name__=="__main__":
     main()
