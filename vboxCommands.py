@@ -42,7 +42,7 @@ def vboxStartMachine(machineName):
     if output.returncode == 0:
         #wait for guest execution service
         print("waiting for complete startup")
-        time.sleep(10)
+        time.sleep(20)
     
     return output.returncode
 

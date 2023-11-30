@@ -20,7 +20,7 @@ try:
     print(driver.get_log('browser'))
 
     if future==1:
-        time.sleep(30)
+        time.sleep(20)
     else:
         time.sleep(5)
 finally:

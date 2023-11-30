@@ -12,6 +12,8 @@ calc.exe kan niet worden geopend met verschillende cmd args om meer prefetch fil
 proberen van het veranderen van de tijd zonder de vm te moeten afsluiten, chrome verwijderd de history niet als die via cmd word geopend maar wel soms als die via de gui word geopend
 
 # 30 nov 2023
-Selenium geinstalleerd, kan websites openen en krijg ze te zien in de history. nu testen in de toekomst
+Selenium geinstalleerd, kan websites openen en krijg ze te zien in de history. nu testen in de toekomst.
+kan websites openen in de toekomst, als je chrome 30sec laat openstaan en dan de history bekijkt zie je dat die verwijderd word.
 
-selenium word opgestart on boot in windows 10 en met de juiste gebruiker
+
+selenium word opgestart on boot in windows 10 en met de juiste gebruiker door taskscheduler te gebruiken

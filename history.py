@@ -10,6 +10,9 @@ ssh_port = 22
 ssh_username = "user"
 ssh_password = "user123"
 
+#debug
+debugPrints=1
+
 def getHistoryCount():
     # Local directory to save the Chrome history file
     local_dir = "./"
@@ -53,28 +56,14 @@ def parseHistory(historyfile):
         count += 1
         url, title, visit_count, last_visit_time = row
         visit_time = epoch + timedelta(microseconds=last_visit_time)
-        print(f"URL: {url}, TIME: {visit_time}")
-        #print(f"Title: {title}")
-        #print(f"Visit Count: {visit_count}")
-        #print("\n")
-    print(f"Amount of history entries is {count}")
+        if debugPrints:
+            print(f"URL: {url}, TIME: {visit_time}")
+            #print(f"Title: {title}")
+            #print(f"Visit Count: {visit_count}")
+            #print("\n")
+    if debugPrints:
+        print(f"Amount of history entries is {count}")
+    return(count)
 
-def openChrome(url):
-    # Establish an SSH connection
-    ssh = paramiko.SSHClient()
-    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    ssh.connect(ssh_host, ssh_port, ssh_username, ssh_password)
-
-    ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(f'"/Users/user/Desktop/chrome - Shortcut.lnk" {url}')
-    #print(ssh_stdout)
-    
-    ssh.close()
-def closeChrome():
-    ssh = paramiko.SSHClient()
-    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    ssh.connect(ssh_host, ssh_port, ssh_username, ssh_password)
-    print(ssh.exec_command(f"taskkill /f /im chrome.exe /t"))
-    ssh.close()
 if __name__=="__main__":
-    #openChrome("google.com")
     getHistoryCount()
