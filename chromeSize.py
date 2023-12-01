@@ -21,21 +21,13 @@ def getSeleniumDriver():
 def getHistory():
     vboxCommands.vboxGetFile(VMName,"/Users/User/AppData/Local/Google/Chrome/User Data/Default/History", "./tmp/",VMUsername,VMPassword)
     return history.parseHistory("./tmp/History")
-def visitSites():
+def visitSites(url):
     driver = getSeleniumDriver()
-    driver.get("https://facebook.com")
-    driver.get("https://google.com")
-    driver.get("https://reddit.com")
-    driver.get("https://example.com")
-    time.sleep(5)
+    driver.get(url)
+    time.sleep(2)
     driver.close()
     driver.quit()
-def setDate(newDate):
-    formatted_date = newDate.strftime("%d-%m-%y")
-    output = vboxCommands.vboxRunCommand(VMName,"C:\\Windows\\System32\\cmd.exe", ["/c" , "date", formatted_date], VMUsername,VMPassword,15000)
-    if output.returncode != 0:
-        print("setting time timed out")
-        exit(-1)
+
 def checkHistory(currentCount, cycle):
     driver = getSeleniumDriver()
     driver.get("http://example.com")
@@ -62,24 +54,14 @@ def main():
     print("Testing data rollover for chrome on windows10")
     print("starting VM")
     vboxCommands.vboxStartMachine(VMName)
-    currentDate = datetime.datetime.now().date()
-    setDate(currentDate)
     print("Getting current history amount")
     print(f"There are currently {getHistory()} history entries")
     print("Visiting websites")
-    visitSites()
-    currentCount=getHistory()
-    print(f"There are currently {currentCount} history entries")
-    print(f"Current date: {currentDate}")
-    for i in range(5,200,5):
-        newDate= currentDate + datetime.timedelta(days=i)
-        setDate(newDate)
-        print(f"Current set date is {newDate}, {i} days from now")
-        if checkHistory(currentCount,i)==1:
-            print(f"After {i} days the history count changed from {currentCount} to {getHistory()}")
-            break
+    for i in range(0,400,2):
+        visitSites(f"https://forums.virtualbox.org/viewtopic.php?t={i}")
+        if i%50 ==0:
+            getHistory()
     print("Done")       
-    setDate(currentDate)
 
 if __name__=="__main__":
     main()
