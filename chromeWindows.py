@@ -1,6 +1,6 @@
-import vboxCommands
+import framework.vboxCommands as vboxCommands
 from selenium import webdriver
-import history
+import framework.history as history
 import datetime
 import time
 VMName="Windows10"

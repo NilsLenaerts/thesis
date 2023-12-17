@@ -11,7 +11,7 @@ ssh_username = "user"
 ssh_password = "user123"
 
 #debug
-debugPrints=1
+debugPrints=0
 
 def getHistoryCount():
     # Local directory to save the Chrome history file
@@ -62,7 +62,7 @@ def parseHistory(historyfile):
             #print(f"Visit Count: {visit_count}")
             #print("\n")
     if debugPrints:
-        print(f"Amount of history entries is {count}")
+        print(f"Number of history entries is {count}")
     return(count)
 
 if __name__=="__main__":

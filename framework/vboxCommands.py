@@ -57,6 +57,18 @@ def vboxGetFile(machineName, guestPath, hostPath,username, password):
     if debug:
         printOutput(output)
     return output.returncode
+
+def vboxRemoveFile(machineName, guestPath,username, password):
+    command = ["VBoxManage", "guestcontrol" , machineName, "rm", guestPath, f"--username={username}", f"--password={password}"]
+    output = subprocess.run(command,capture_output=True)
+    if "guest execution service is not ready" in output.stderr.decode("utf-8"):
+        print("Machine not fully on retrying in 5 sec")
+        time.sleep(5)
+        output = vboxGetFile(machineName,guestPath, username, password)
+        return output
+    if debug:
+        printOutput(output)
+    return output.returncode
 def vboxGetRunningVMs():
     command = ["VBoxManage", "list", "runningvms"]
     output = subprocess.run(command,capture_output=True)
@@ -66,7 +78,8 @@ def vboxGetRunningVMs():
 def vboxRunCommand(machineName, commandPath, args, username, password, timeout=0):
     command = ["VBoxManage", "guestcontrol" , machineName, "run", f"--exe={commandPath}", f"--username={username}", f"--password={password}", f"--timeout={timeout}", "--"] + args
     output = subprocess.run(command,capture_output=True)
-    print(output)
+    if debug:
+        print(output)
     return output
     
 
