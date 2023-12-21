@@ -12,7 +12,7 @@ class AndroidEnvironment(baseClasses.BaseEnvironment):
     def __init__(self):
         self.envName="Android"
         self.device = self.getAdbSession()
-        self.setDate(datetime.datetime.now().date())
+        self.setDate(datetime.datetime.now())
         
 
     def getAdbSession(self):
