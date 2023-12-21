@@ -66,4 +66,5 @@ def parseHistory(historyfile):
     return(count)
 
 if __name__=="__main__":
+    parseHistory("./tmp/History")
     getHistoryCount()

@@ -38,6 +38,7 @@ for button in close:
     button.click()
 time.sleep(5)
 driver.terminate_app('com.android.chrome')
+
 driver.quit()
 
 

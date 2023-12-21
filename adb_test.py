@@ -12,7 +12,7 @@ signer = PythonRSASigner(pub, priv)
 
 device2 = AdbDeviceUsb()
 device2.connect(rsa_keys=[signer], auth_timeout_s=0.1)
-response1 = device2.shell('su -c ls /data/data/com.android.')
+response1 = device2.shell('su -c ls /data/data/com.android.chrome/app_data/')
 response2 = device2.shell('whoami')
 print(response1)
 
