@@ -1,6 +1,8 @@
 import baseClasses
 import time
 import history
+from selenium import webdriver
+
 
 class Chrome(baseClasses.TargetApplication):
     def __init__(self, environment):
@@ -15,6 +17,15 @@ class Chrome(baseClasses.TargetApplication):
             print(f"Environment: {self.environment.envName} not implimented ")
             raise RuntimeError()
         
+    def getAutomationDriver(self, args):
+        options = webdriver.ChromeOptions()
+        options.add_argument(args)
+        driver = webdriver.Remote(
+        command_executor=f'http://{self.environment.VM_IPADDR}:4444/wd/hub',
+        options=options
+        )
+        return driver
+     
     def __del__(self):
         print(f"cleaning up {self.targetName}")
 
@@ -35,7 +46,7 @@ class Chrome(baseClasses.TargetApplication):
         return history.parseHistory("./tmp/History")
 
     def createArtifact(self,timeout):
-        driver = self.environment.getAutomationDriver(args="user-data-dir=/Users/user/AppData/Local/Google/Chrome/User Data/")
+        driver = self.getAutomationDriver(args="user-data-dir=/Users/user/AppData/Local/Google/Chrome/User Data/")
         driver.get("http://example.com")
         time.sleep(timeout)
         driver.close() 
@@ -48,7 +59,7 @@ class Chrome(baseClasses.TargetApplication):
 
     def setupArtifacts(self):
         print(f"setting up artifacts")
-        driver = self.environment.getAutomationDriver(args="user-data-dir=/Users/user/AppData/Local/Google/Chrome/User Data/")
+        driver = self.getAutomationDriver(args="user-data-dir=/Users/user/AppData/Local/Google/Chrome/User Data/")
         try:
             driver.get("https://facebook.com")
             time.sleep(1)

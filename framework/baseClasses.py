@@ -16,7 +16,7 @@ class BaseEnvironment:
         raise NotImplementedError()
     
     def removeFile(self):
-        raise NotImplementedError
+        raise NotImplementedError()
 
 class TargetApplication:
     def __init__(self, environment):

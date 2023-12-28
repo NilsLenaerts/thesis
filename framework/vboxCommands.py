@@ -1,4 +1,3 @@
-import virtualbox
 import subprocess
 import time
 debug = 0

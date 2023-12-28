@@ -30,7 +30,6 @@ class AndroidEnvironment(baseClasses.BaseEnvironment):
     
     def setDate(self,newDate):
         #MMDDhhmm[[CC]YY][.ss]
-        #device = self.getAdbSession()
         device = self.device
         formatted_date= newDate.strftime("%m%d%H%M%Y.%S")
         print("setting date")
@@ -39,7 +38,6 @@ class AndroidEnvironment(baseClasses.BaseEnvironment):
         
 
     def getFile(self,path):
-        #device = self.getAdbSession()
         device = self.device
         if not os.path.exists("tmp/"):
             os.makedirs("tmp")
@@ -48,19 +46,19 @@ class AndroidEnvironment(baseClasses.BaseEnvironment):
         device.shell(f"su -c cp {path} {tmp_path}")
         device.pull(tmp_path,f"./tmp/{file_name}")
         
-        
-        #"su -c cp /data/data/com.android.chrome/app_chrome/Default/History /sdcard/tmp/History"
     
     def removeFile(self,path):
         #Be very carefull here
-        #device = self.getAdbSession()
         device = self.device
+
+        #device.shell(f"su -c rm {path})
+        #Hardcoded to prevent accidental wipe of whole phone due to a typo
         device.shell(f"su -c rm /data/data/com.android.chrome/app_chrome/Default/History")
         
         
     def closeSession(self):
         self.device.close()   
-        #return super().removeFile()
+
     def createSession(self):
         if self.device.available:
             return

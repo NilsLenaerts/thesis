@@ -29,15 +29,6 @@ class WindowsEnvironment(baseClasses.BaseEnvironment):
         if output.returncode != 0:
             print("setting time timed out")
             raise TimeoutError()
-
-    def getAutomationDriver(self, args):
-        options = webdriver.ChromeOptions()
-        options.add_argument(args)
-        driver = webdriver.Remote(
-        command_executor=f'http://{self.VM_IPADDR}:4444/wd/hub',
-        options=options
-        )
-        return driver
     
     def removeFile(self,path):
         vboxCommands.vboxRemoveFile(self.VM_NAME,path, self.VM_USERNAME, self.VM_PASSWORD)
