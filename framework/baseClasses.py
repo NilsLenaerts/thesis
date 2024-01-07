@@ -12,9 +12,6 @@ class BaseEnvironment:
     def setDate(self, date):
         raise NotImplementedError()
     
-    def getAutomationDriver():
-        raise NotImplementedError()
-    
     def removeFile(self):
         raise NotImplementedError()
 
@@ -26,7 +23,7 @@ class TargetApplication:
     def printName(self):
         print(self.targetName)
 
-    def getArtifact(self,timeout):
+    def createArtifact(self,timeout):
         print(f"getting {self.targetName} artifact in the {self.environment.envName} env")
         raise NotImplementedError()
     

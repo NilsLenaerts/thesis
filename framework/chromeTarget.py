@@ -17,7 +17,8 @@ class Chrome(baseClasses.TargetApplication):
             print(f"Environment: {self.environment.envName} not implimented ")
             raise RuntimeError()
         
-    def getAutomationDriver(self, args):
+    def getAutomationDriver(self):
+        args="user-data-dir=/Users/user/AppData/Local/Google/Chrome/User Data/"
         options = webdriver.ChromeOptions()
         options.add_argument(args)
         driver = webdriver.Remote(
@@ -30,15 +31,6 @@ class Chrome(baseClasses.TargetApplication):
         print(f"cleaning up {self.targetName}")
 
     def getArtifact(self):
-
-        print(f"getting {self.targetName} artifact in the {self.environment.envName} env")
-        #if self.environment.envName == "Windows 10":
-        #    filePath = "/Users/User/AppData/Local/Google/Chrome/User Data/Default/History"
-        #elif self.environment.envName == "Android":
-        #    filePath = "/data/data/com.android.chrome/app_chrome/Default/History"
-        #else:
-        #    print(f"Environment: {self.environment.envName} not implimented ")
-        #    raise RuntimeError()
         return self.environment.getFile(self.historyPath)
     
     def getArtifactCount(self):
@@ -46,7 +38,8 @@ class Chrome(baseClasses.TargetApplication):
         return history.parseHistory("./tmp/History")
 
     def createArtifact(self,timeout):
-        driver = self.getAutomationDriver(args="user-data-dir=/Users/user/AppData/Local/Google/Chrome/User Data/")
+        driver = self.getAutomationDriver()
+        driver.maximize_window()
         driver.get("http://example.com")
         time.sleep(timeout)
         driver.close() 
@@ -59,7 +52,7 @@ class Chrome(baseClasses.TargetApplication):
 
     def setupArtifacts(self):
         print(f"setting up artifacts")
-        driver = self.getAutomationDriver(args="user-data-dir=/Users/user/AppData/Local/Google/Chrome/User Data/")
+        driver = self.getAutomationDriver()
         try:
             driver.get("https://facebook.com")
             time.sleep(1)

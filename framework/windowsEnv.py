@@ -1,7 +1,6 @@
 import baseClasses
 import vboxCommands
 import os
-from selenium import webdriver
 import datetime
 
 class WindowsEnvironment(baseClasses.BaseEnvironment):
@@ -32,4 +31,4 @@ class WindowsEnvironment(baseClasses.BaseEnvironment):
     
     def removeFile(self,path):
         vboxCommands.vboxRemoveFile(self.VM_NAME,path, self.VM_USERNAME, self.VM_PASSWORD)
-        
+    

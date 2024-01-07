@@ -49,13 +49,6 @@ class Chrome(baseClasses.TargetApplication):
     def getArtifact(self):
         self.environment.createSession()
         print(f"getting {self.targetName} artifact in the {self.environment.envName} env")
-        #if self.environment.envName == "Windows 10":
-        #    filePath = "/Users/User/AppData/Local/Google/Chrome/User Data/Default/History"
-        #elif self.environment.envName == "Android":
-        #    filePath = "/data/data/com.android.chrome/app_chrome/Default/History"
-        #else:
-        #    print(f"Environment: {self.environment.envName} not implimented ")
-        #    raise RuntimeError()
         return self.environment.getFile(self.historyPath)
     
     def getArtifactCount(self):

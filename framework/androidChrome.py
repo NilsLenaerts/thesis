@@ -26,7 +26,7 @@ def main():
         newDate= currentDate + datetime.timedelta(days=i)
         env.setDate(newDate)
         print(f"Current set date is {newDate}, {i} days from now")
-        target.createArtifact(40)
+        target.createArtifact()
         newCount = target.getArtifactCount()
 
         if newCount < currentCount:

@@ -38,7 +38,7 @@ def main():
     print(f"Current date: {currentDate}")
 
     #starting x days from now, 
-    for i in range(80,200,1):
+    for i in range(85,200,1):
         newDate= currentDate + datetime.timedelta(days=i)
         env.setDate(newDate)
         print(f"Current set date is {newDate}, {i} days from now")
