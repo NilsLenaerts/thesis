@@ -38,7 +38,7 @@ def setDate(newDate):
         exit(-1)
 def checkHistory(currentCount, cycle):
     driver = getSeleniumDriver()
-    driver.get("http://example.com")
+    driver.maximize_window()
     print("waiting for update in history")
     sleeptime = 20
     if cycle > 25:
