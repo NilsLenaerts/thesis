@@ -35,13 +35,18 @@ class AndroidEnvironment(baseClasses.BaseEnvironment):
         print("setting date")
         device.shell(f"su -c toybox date {formatted_date}")
         
+    def runCommand(self,command):
+        device=self.device
+        device.shell(f"{command}")
         
 
     def getFile(self,path):
         device = self.device
         if not os.path.exists("tmp/"):
             os.makedirs("tmp")
+        
         file_name=path.split('/')[-1]
+        os.remove(f"./tmp/{file_name}")
         tmp_path = f"/sdcard/tmp/{file_name}"
         device.shell(f"su -c cp {path} {tmp_path}")
         device.pull(tmp_path,f"./tmp/{file_name}")

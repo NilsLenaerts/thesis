@@ -40,7 +40,7 @@ class Chrome(baseClasses.TargetApplication):
     def createArtifact(self,timeout):
         driver = self.getAutomationDriver()
         driver.maximize_window()
-        driver.get("http://example.com")
+        #driver.get("http://example.com")
         time.sleep(timeout)
         driver.close() 
         driver.quit()

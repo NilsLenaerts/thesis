@@ -26,7 +26,7 @@ class Chrome(baseClasses.TargetApplication):
         capabilities = dict(
             platformName='Android',
             automationName='uiautomator2',
-            deviceName='934814e7',
+            deviceName='934814e7', #UID of the target smartphone
             language='en',
             locale='US',
             appPackage= "com.android.chrome",
@@ -40,8 +40,6 @@ class Chrome(baseClasses.TargetApplication):
             forceAppLaunch=True,
             ChromedriverArgsOption = ["--user-data-dir '/data/data/com.android.chrome/app_chrome/'"]
         )
-
-
         options = UiAutomator2Options().load_capabilities(capabilities)
         appium_server_url = 'http://localhost:4723'
         driver = webdriver.Remote(appium_server_url, options=options)
@@ -56,31 +54,33 @@ class Chrome(baseClasses.TargetApplication):
         self.environment.getFile(self.historyPath)
         return history.parseHistory("./tmp/History")
 
-    def createArtifact(self,timeout):
+    def createArtifact(self):
         self.environment.closeSession()
         driver = self.getAndroidDriver()
         driver.get("http://example.com")
         time.sleep(1)
-        driver.get("http://example.com")
-        #driver.swipe(530,530,530,1250,400)
-        time.sleep(2)
-        self.closeTabs(driver)
-        #tabs = driver.find_element(by=AppiumBy.ID,value='com.android.chrome:id/tab_switcher_button')
-        #tabs.click()
-        #time.sleep(1)
-        #
-        #close = driver.find_elements(by=AppiumBy.ID,value='com.android.chrome:id/action_button')
-        #for button in close:
-        #    button.click()
-        time.sleep(10)
-        driver.background_app(5)
-        time.sleep(5)
-        driver.get("http://httpbin.org")
-        time.sleep(2)
-        #print(driver.get_window_size())
+        #driver.tap([(1033,163)],100)
+        time.sleep(1)
+        #driver.tap([(523,584)],100)
+        time.sleep(50)
+        #driver.tap([(1000,140)],100)
         driver.swipe(530,530,530,1250,400)
+        #time.sleep(1)
+        #driver.tap([(523,584)],100)
+        #time.sleep(50)
+        #driver.tap([(1000,140)],100)
+        #driver.background_app(5)
+        #time.sleep(5)
+        #self.closeTabs(driver)
 
-        time.sleep(100)
+        #driver.get("http://httpbin.org")
+        #time.sleep(2)
+        ##print(driver.get_window_size())
+        
+        #driver.swipe(530,530,530,1250,400)
+        
+        time.sleep(120)
+        #self.closeTabs(driver)
         driver.terminate_app('com.android.chrome')
         driver.quit()
         time.sleep(0.1)
@@ -103,17 +103,7 @@ class Chrome(baseClasses.TargetApplication):
             time.sleep(1)
             driver.get("https://kuleuven.be")
             time.sleep(10)
-            print("sending tabs request")
-            #driver.tap()
             self.closeTabs(driver)
-            #tabs = driver.find_element(by=AppiumBy.ID,value='com.android.chrome:id/tab_switcher_button')
-            #tabs.click()
-            #time.sleep(5)
-            #print("sending close request")
-            #
-            #close = driver.find_elements(by=AppiumBy.ID,value='com.android.chrome:id/action_button')
-            #for button in close:
-            #    button.click()
         except Exception as e:
             print(f"error occured {e}")
             driver.terminate_app('com.android.chrome')
